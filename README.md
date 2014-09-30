@@ -1,6 +1,6 @@
 subfetch.py
 
-Author: Mauricio Teixeira <mauricio.teixeira at gmail.com>
+Author: Mauricio Teixeira &lt;mauricio.teixeira at gmail.com&gt;
 
 Developed just as Python practice, to help a friend fetch subtitles for his
 video files.
@@ -9,7 +9,7 @@ NOTE: as of now, this script only downloads subtitles in Brazilian Portuguese.
 
 Usage:
 
-./subfetch.py -t <dir|file>
+./subfetch.py -t &lt;dir|file&gt;
 
 Optionally you can use -v to see what the script is doing.
 
