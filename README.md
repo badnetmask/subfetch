@@ -1,12 +1,9 @@
-# Text File
-#
-# $id: README,v 1.0.0 2014/01/29 20:14:30 mteixeir Exp $
-# Copyright (C) 2014
-#
-# Last Modified: 2014/09/30 17:27:31
+subfetch.py
 
-Developed by Mauricio Teixeira, just as Python practice, to help a friend
-fetch subtitles for his video files.
+Author: Mauricio Teixeira <mauricio.teixeira at gmail.com>
+
+Developed just as Python practice, to help a friend fetch subtitles for his
+video files.
 
 NOTE: as of now, this script only downloads subtitles in Brazilian Portuguese.
 
