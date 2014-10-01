@@ -11,7 +11,7 @@ Usage:
 
 ./subfetch.py -t &lt;dir|file&gt;
 
-Optionally you can use -v to see what the script is doing.
+Check --help for other options.
 
 Part of this code is based on:
 - subdownloader

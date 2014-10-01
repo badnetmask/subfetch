@@ -3,7 +3,7 @@
 # $id: subfetch.py,v 1.0.0 2014/01/29 20:15:20 mteixeir Exp $
 # Copyright (C) 2014
 #
-# Last Modified: 2014/04/08 20:10:29
+# Last Modified: 2014/10/01 17:40:02
 
 import re, os, sys, argparse, struct, xmlrpclib, gzip, base64, StringIO, stat
 
@@ -52,14 +52,18 @@ def BaseToFile(base_data, filename):
   subtitle_file.write(s)
   subtitle_file.close()
 
-def main(target):
+def main(target, recursive):
   mode = os.stat(target).st_mode
   if not os.access(target, os.R_OK):
     print("Unable to access target: %s" % target)
   else:
     osd_login()
     if stat.S_ISDIR(mode):
-      iterate_dir(target)
+      if recursive:
+        for root, dirs, files in os.walk(target):
+          iterate_dir(root, files)
+      else:
+        iterate_dir(target)
     elif stat.S_ISREG(mode):
       fetch_file_sub(target)
     else:
@@ -99,11 +103,12 @@ def fetch_file_sub(video_file):
     r_download = server.DownloadSubtitles(token, [r_search["data"][0]["IDSubtitleFile"]])
     BaseToFile(r_download["data"][0]["data"].encode('ascii'), "%s.srt" % video_file[:-4])
 
-def iterate_dir(topdir):
+def iterate_dir(topdir, files=None):
   videos = []
   subs = []
   if(verbose): print("Scanning for files in %s..." % (topdir))
-  for f in os.listdir(topdir):
+  filenames = files if files else os.listdir(topdir)
+  for f in filenames:
     if(re.match(".*\\.(mkv|MKV|avi|AVI|mp4|MP4)$", f)):
       videos.append(f)
     elif(re.match(".*\\.(sub|srt)$", f)):
@@ -119,11 +124,13 @@ def iterate_dir(topdir):
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument("-t", "--target", help="Video file or Directory to scan (no wildcards ATM)")
+  parser.add_argument("-r", "--recursive", action="store_true", help="Search recursively in a directory")
   parser.add_argument("-v", "--verbose", action="store_true", help="Show detailed information")
   args = parser.parse_args()
   verbose = args.verbose
   target = args.target
+  recursive = args.recursive
   if(not target):
     print("Please specify a target to scan.")
     sys.exit(1)
-  main(target)
+  main(target, recursive)

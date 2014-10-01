@@ -3,7 +3,6 @@
 # $id: TODO,v 1.0.0 2014/09/30 17:19:24 mteixeir Exp $
 # Copyright (C) 2014
 #
-# Last Modified: 2014/09/30 17:26:37
+# Last Modified: 2014/10/01 17:53:14
 
 * Add support for multiple languages.
-* Add support to find files recursively under a directory.
