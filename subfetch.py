@@ -3,7 +3,7 @@
 # $id: subfetch.py,v 1.0.0 2014/01/29 20:15:20 mteixeir Exp $
 # Copyright (C) 2014
 #
-# Last Modified: 2014/10/01 17:40:02
+# Last Modified: 2014/11/03 12:25:34
 
 import re, os, sys, argparse, struct, xmlrpclib, gzip, base64, StringIO, stat
 
@@ -76,7 +76,7 @@ def osd_login():
   global server, token
   if(verbose): print("Attempting OSD login...")
   server = xmlrpclib.Server("http://api.opensubtitles.org/xml-rpc")
-  response = server.LogIn("", "", "en", "OS Test User Agent")
+  response = server.LogIn("", "", "en", "OSTestUserAgent")
   if(response["status"] != "200 OK"):
     print("Error contacting opensubtitles.org: %s" % response["status"])
     sys.exit(1)
