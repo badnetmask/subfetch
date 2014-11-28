@@ -3,7 +3,7 @@
 # $id: subfetch.py,v 1.0.0 2014/01/29 20:15:20 mteixeir Exp $
 # Copyright (C) 2014
 #
-# Last Modified: 2014/11/03 12:25:34
+# Last Modified: 2014/11/28 14:58:14
 
 import re, os, sys, argparse, struct, xmlrpclib, gzip, base64, StringIO, stat
 
@@ -11,6 +11,8 @@ server = None
 token = None
 verbose = None
 target = None
+language = None
+overwrite = None
 
 def hashAndSizeFile(filename): 
         try:
@@ -87,7 +89,7 @@ def fetch_file_sub(video_file):
   if(not re.match(".*\\.(mkv|MKV|avi|AVI|mp4|MP4)$", video_file)):
     print("Not a valid video file: %s" % video_file)
     sys.exit(1)
-  elif(os.path.exists("%s.srt" % video_file[:-4])):
+  elif(os.path.exists("%s.srt" % video_file[:-4]) and not overwrite):
     print("Video already has a subtitle: %s" % video_file)
     sys.exit(0)
 
@@ -95,7 +97,7 @@ def fetch_file_sub(video_file):
   file_size = str(os.path.getsize(video_file))
   if(verbose): print("File %s hash is %s" % (os.path.basename(video_file), file_hash))
   if(verbose): print("Searching subtitle for %s" % file_hash)
-  r_search = server.SearchSubtitles(token, [{"sublanguageid": "pob", "moviehash": file_hash, "moviebytesize": file_size}])
+  r_search = server.SearchSubtitles(token, [{"sublanguageid": language, "moviehash": file_hash, "moviebytesize": file_size}])
   if(not r_search["data"]):
     print("Subtitles not found for %s" % os.path.basename(video_file))
   else:
@@ -119,17 +121,23 @@ def iterate_dir(topdir, files=None):
     if(v[:-4] not in subs):
       if(verbose): print("File %s doesn't have a sub, need to fetch..." % v)
       fetch_file_sub(os.path.join(topdir, v))
-
+    elif overwrite:
+      if(verbose): print ("Re-downloading sub for %s..." % v)
+      fetch_file_sub(os.path.join(topdir, v))
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument("-t", "--target", help="Video file or Directory to scan (no wildcards ATM)")
+  parser.add_argument("-l", "--language", help="Language to fecth (default is still 'pob'. Valid languages: http://www.opensubtitles.org/addons/export_languages.php")
   parser.add_argument("-r", "--recursive", action="store_true", help="Search recursively in a directory")
+  parser.add_argument("-o", "--overwrite", action="store_true", help="Overwrite existing subtitles")
   parser.add_argument("-v", "--verbose", action="store_true", help="Show detailed information")
   args = parser.parse_args()
   verbose = args.verbose
   target = args.target
   recursive = args.recursive
+  language = args.language or "pob"
+  overwrite = args.overwrite
   if(not target):
     print("Please specify a target to scan.")
     sys.exit(1)
