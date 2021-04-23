@@ -2,6 +2,10 @@ subfetch.py
 
 Author: Mauricio Teixeira &lt;mauricio.teixeira at gmail.com&gt;
 
+NOTE: I have not used this in a very long time,
+so it's most likely outdated, or not even functional.
+Feel free to reach out if you have suggestions to update.
+
 Developed just as Python practice, to help a friend fetch subtitles for his
 video files.
 
